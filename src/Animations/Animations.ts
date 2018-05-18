@@ -69,7 +69,8 @@ class Animations implements IAnimations {
 
     const animCssOpts: Opts<string> = {};
 
-    Object.keys(pCssOpts)
+    const cssOptsKeys = Object.keys(pCssOpts) as (keyof rectangleSelectionCssOpts)[];
+    cssOptsKeys
       .filter(prop => allowedOpts.includes(prop))
       .forEach(prop => {
         switch (prop) {

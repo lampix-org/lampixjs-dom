@@ -9,6 +9,11 @@ export type createHtmlElementAttrs = {
 export type rectangleSelectionCssOptsKeys = 'borderWidth' | 'borderColor' | 'offset';
 
 export type rectangleSelectionCssOpts = {
+  /**
+   * Below declaration not needed if you access the object keys like this:
+   * const keys = Object.keys(obj: rectangleSelectionCssOpts) as (keyof rectangleSelectionCssOpts)[];
+   */
+  // [key: string]: string | number,
   [k in rectangleSelectionCssOptsKeys]?: string | number
 };
 
