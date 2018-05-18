@@ -21,11 +21,13 @@ const createHtmlElement = (tagName: string, html?: string, attrs?: Opts<string>,
     element.setAttribute(prop, attrs[prop]);
   });
   // set css style
-  const style = Object.keys(css)
-    .map(key => `${key}: ${css[key]};`)
-    .join(' ');
-  if (style.length) {
-    element.setAttribute('style', style);
+  if (typeof css === 'object') {
+    const style = Object.keys(css)
+      .map(key => `${key}: ${css[key]};`)
+      .join(' ');
+    if (style.length) {
+      element.setAttribute('style', style);
+    }
   }
   element.innerHTML = html;
   return element;
