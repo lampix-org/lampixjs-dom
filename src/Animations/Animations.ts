@@ -1,4 +1,4 @@
-import snakeCase from 'lodash.snakecase';
+import kebabCase from 'lodash.kebabcase';
 import {
   Opts,
   rectangleSelectionOptions,
@@ -18,12 +18,12 @@ class Animations implements IAnimations {
   /**
    * rectangleSelection animation
    * @param  {Object} element      DOM Node
-   * @param  {Object|null} [opts={}]    Allowed opts: borderWidth, borderColor, offset, (boolean) unselectAll
+   * @param  {Object} [opts={}]    Allowed opts: borderWidth, borderColor, offset, (boolean) unselectAll
    * @return {Object}              DOM Node
    */
   rectangleSelection = (
     element: HTMLHtmlElement,
-    opts: rectangleSelectionOptions | null
+    opts?: rectangleSelectionOptions
   ): HTMLHtmlElement => {
 
     const cssAnimClass = 'lx-anim-corners';
@@ -85,10 +85,10 @@ class Animations implements IAnimations {
       corner2CssOpts.right = `-${offset}px`;
 
       const corner1Style = Object.keys(corner1CssOpts)
-        .map(key => `${snakeCase(key).replace('_', '-')}: ${corner1CssOpts[key]};`)
+        .map(key => `${kebabCase(key)}: ${corner1CssOpts[key]};`)
         .join(' ');
       const corner2Style = Object.keys(corner2CssOpts)
-        .map(key => `${snakeCase(key).replace('_', '-')}: ${corner2CssOpts[key]};`)
+        .map(key => `${kebabCase(key)}: ${corner2CssOpts[key]};`)
         .join(' ');
 
       const corner1 = createHtmlElement('i', { style: corner1Style });
