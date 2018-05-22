@@ -6,25 +6,21 @@ export type createHtmlElementAttrs = {
   class?: string,
 };
 
-export type rectangleSelectionCssOptsKeys = 'borderWidth' | 'borderColor' | 'offset';
-
-export type rectangleSelectionCssOpts = {
-  /**
-   * Below declaration not needed if you access the object keys like this:
-   * const keys = Object.keys(obj: rectangleSelectionCssOpts) as (keyof rectangleSelectionCssOpts)[];
-   */
-  // [key: string]: string | number,
-  [k in rectangleSelectionCssOptsKeys]?: string | number
-};
-
-export type rectangleSelectionOpts = {
-  unselectAll: boolean
+export type rectangleSelectionOptions = {
+  borderWidth?: number,
+  borderColor?: string,
+  offset?: number,
+  unselectAll?: boolean,
 };
 
 export interface IAnimations {
   rectangleSelection: (
     element: HTMLHtmlElement,
-    cssOpts: rectangleSelectionCssOpts,
-    opts: boolean | rectangleSelectionOpts
+    opts: rectangleSelectionOptions | null
   ) => HTMLHtmlElement;
 }
+
+export type createHtmlElementOptions = {
+  html?: string,
+  [key: string]: string
+};

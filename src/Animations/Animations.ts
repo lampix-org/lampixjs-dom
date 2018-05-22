@@ -1,92 +1,60 @@
+import snakeCase from 'lodash.snakecase';
 import {
   Opts,
-  rectangleSelectionCssOpts,
-  rectangleSelectionOpts,
+  rectangleSelectionOptions,
   IAnimations,
 } from '../types';
-import styles from './styles';
 
-const loadStyles = () => {
-  const style = document.createElement('style');
-  style.type = 'text/css';
-  style.innerHTML = styles;
-
-  document.head.appendChild(style);
-};
-
-const createHtmlElement = (tagName: string, html?: string, attrs?: Opts<string>, css?: Opts<string>): HTMLElement => {
-  const element = <HTMLElement> document.createElement(tagName);
-  // set attributes
-  Object.keys(attrs).forEach(prop => {
-    element.setAttribute(prop, attrs[prop]);
-  });
-  // set css style
-  if (typeof css === 'object') {
-    const style = Object.keys(css)
-      .map(key => `${key}: ${css[key]};`)
-      .join(' ');
-    if (style.length) {
-      element.setAttribute('style', style);
-    }
-  }
-  element.innerHTML = html;
-  return element;
-};
+import {
+  loadStyles,
+  createHtmlElement
+} from '../utils';
 
 // ensure css is loaded
 loadStyles();
-
 
 class Animations implements IAnimations {
 
   /**
    * rectangleSelection animation
    * @param  {Object} element      DOM Node
-   * @param  {Object} [cssOpts={}] Allowed opts: borderWidth, borderColor, offset
-   * @param  {Object|Boolean} [opts={}]    Allowed opts: (boolean) unselectAll
+   * @param  {Object|null} [opts={}]    Allowed opts: borderWidth, borderColor, offset, (boolean) unselectAll
    * @return {Object}              DOM Node
    */
   rectangleSelection = (
     element: HTMLHtmlElement,
-    cssOpts: rectangleSelectionCssOpts,
-    opts: boolean | rectangleSelectionOpts
+    opts: rectangleSelectionOptions | null
   ): HTMLHtmlElement => {
 
     const cssAnimClass = 'lx-anim-corners';
     const cssAnimClassContainer = `${cssAnimClass}__container`;
-    const allowedOpts = ['borderWidth', 'borderColor', 'offset'];
-    const defaultCssOpts: rectangleSelectionCssOpts = {
-      borderWidth: 3,
-      offset: 5,
+    const cssOptsList = ['borderWidth', 'borderColor', 'offset'];
+    const defaultOpts: rectangleSelectionOptions = {
+      borderWidth: 1,
+      borderColor: '#000',
+      offset: 1,
+      unselectAll: true,
     };
-    const defaultOpts: Opts<string|number|boolean> = {
-      unselectAll: false,
-    };
+    const cssOpts: Opts<string|number> = {};
 
-    const pCssOpts = Object.assign(defaultCssOpts, cssOpts);
-    const pOpts = Object.assign(
-      defaultOpts,
-      typeof opts === 'boolean' ? { unselectAll: opts } : opts
-    );
+    opts = Object.assign(defaultOpts, opts);
+    const cssOptsKeys = Object.keys(opts) as (keyof rectangleSelectionOptions)[];
 
-    const animCssOpts: Opts<string> = {};
-
-    const cssOptsKeys = Object.keys(pCssOpts) as (keyof rectangleSelectionCssOpts)[];
     cssOptsKeys
-      .filter(prop => allowedOpts.includes(prop))
+      .filter(prop => cssOptsList.includes(prop))
       .forEach(prop => {
         switch (prop) {
           case 'borderWidth':
-            animCssOpts[prop] = `${pCssOpts[prop]}px`;
+            cssOpts[prop] = `${opts[prop]}px`;
             break;
           default:
-            animCssOpts[prop] = `${pCssOpts[prop]}`;
+            cssOpts[prop] = `${opts[prop]}`;
             break;
         }
       });
 
     // unselect other rectangles
-    if (pOpts.unselectAll === true) {
+    if (opts.unselectAll === true) {
       const existingElements = document.getElementsByClassName(cssAnimClass);
       Array.from(existingElements).forEach(node => {
         const containers = node.getElementsByClassName(cssAnimClassContainer);
@@ -99,25 +67,32 @@ class Animations implements IAnimations {
 
     if (!element.classList.contains(cssAnimClass)) {
       // add helper elements
-      const animContainer = createHtmlElement('div', '', { class: cssAnimClassContainer });
+      const animContainer = createHtmlElement('div', { class: cssAnimClassContainer });
 
-      const corner1CssOpts = Object.assign({}, animCssOpts);
-      const corner2CssOpts = Object.assign({}, animCssOpts);
-      let offset = Number.parseFloat(animCssOpts.offset);
-      if (!Number.isNaN(offset)) {
-        // take into account border width
-        offset += Number.parseFloat(`${animCssOpts.borderWidth}`);
+      const corner1CssOpts = Object.assign({}, cssOpts);
+      const corner2CssOpts = Object.assign({}, cssOpts);
+      let offset = Number.parseFloat(`${cssOpts.offset}`);
 
-        delete corner1CssOpts.offset;
-        corner1CssOpts.top = `-${offset}px`;
-        corner1CssOpts.left = `-${offset}px`;
+      // take into account border width
+      offset += Number.parseFloat(`${cssOpts.borderWidth}`);
 
-        delete corner2CssOpts.offset;
-        corner2CssOpts.bottom = `-${offset}px`;
-        corner2CssOpts.right = `-${offset}px`;
-      }
-      const corner1 = createHtmlElement('i', '', {}, corner1CssOpts);
-      const corner2 = createHtmlElement('i', '', {}, corner2CssOpts);
+      delete corner1CssOpts.offset;
+      corner1CssOpts.top = `-${offset}px`;
+      corner1CssOpts.left = `-${offset}px`;
+
+      delete corner2CssOpts.offset;
+      corner2CssOpts.bottom = `-${offset}px`;
+      corner2CssOpts.right = `-${offset}px`;
+
+      const corner1Style = Object.keys(corner1CssOpts)
+        .map(key => `${snakeCase(key).replace('_', '-')}: ${corner1CssOpts[key]};`)
+        .join(' ');
+      const corner2Style = Object.keys(corner2CssOpts)
+        .map(key => `${snakeCase(key).replace('_', '-')}: ${corner2CssOpts[key]};`)
+        .join(' ');
+
+      const corner1 = createHtmlElement('i', { style: corner1Style });
+      const corner2 = createHtmlElement('i', { style: corner2Style });
       animContainer.appendChild(corner1);
       animContainer.appendChild(corner2);
 
