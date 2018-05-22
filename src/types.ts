@@ -16,7 +16,7 @@ export type rectangleSelectionOptions = {
 export interface IAnimations {
   rectangleSelection: (
     element: HTMLHtmlElement,
-    opts: rectangleSelectionOptions | null
+    opts?: rectangleSelectionOptions
   ) => HTMLHtmlElement;
 }
 
