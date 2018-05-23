@@ -51,6 +51,50 @@ const css = `
     opacity: 1;
   }
 }
+
+ .lx-button { }
+ .lx-button__svg { }
+
+ .lx-button__path {}
+ .lx-button__loader {
+   stroke-linecap: round;
+   transform-origin: center;
+   transform: scale(-1,1) rotate(90deg);
+   transition: stroke-dashoffset 2s ease-in-out;
+ }
+ .lx-button--animated .lx-button__loader {
+   stroke-dashoffset: 0;
+ }
+
+.lx-button__label {
+  display: block;
+  width: max-content;
+  position: absolute;
+}
+.lx-button__label--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+}
+.lx-button__label--bottom {
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+.lx-button__label--left {
+  top: 50%;
+  transform: translateY(-50%);
+  right: 100%;
+  margin-right: 10px;
+}
+.lx-button__label--right {
+  top: 50%;
+  transform: translateY(-50%);
+  left: 100%;
+  margin-left: 10px;
+}
+
   `;
 
 export default css;
