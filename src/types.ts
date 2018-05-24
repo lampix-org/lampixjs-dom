@@ -20,13 +20,10 @@ export interface IAnimations {
   ) => HTMLHtmlElement;
 }
 
-export type screenPosition = {
-  x: number,
-  y: number
-};
-
 export type buttonsGenerateOptions = {
-  parent: HTMLElement,
+  x: number,
+  y: number,
+  parent?: HTMLElement,
   strokeWidth?: number,
   strokeColor?: string,
   radius?: number,
@@ -40,11 +37,9 @@ export type buttonsGenerateOptions = {
 };
 
 export interface IButtons {
-  // generate(pos, opts = {}, callback) {
   generate: (
-    pos: screenPosition,
     opts: buttonsGenerateOptions,
-    callback?: () => void
+    callback: Function
   ) => void;
 }
 

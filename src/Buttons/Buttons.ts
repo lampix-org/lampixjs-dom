@@ -1,6 +1,5 @@
 import {
   Opts,
-  screenPosition,
   buttonsGenerateOptions,
   IButtons,
 } from '../types';
@@ -10,22 +9,13 @@ import {
   styleToString
 } from '../utils';
 
+import defaultOpts from './defaults';
+
 class Buttons implements IButtons {
-  generate(pos: screenPosition, opts: buttonsGenerateOptions, callback?: () => void) {
+  generate(opts: buttonsGenerateOptions, callback: Function) {
     const btnCssClass = 'lx-button';
     const allowedLabelPosition = ['bottom', 'left', 'top', 'right'];
     const defaultLabelPosition = 'bottom';
-
-    const defaultOpts: buttonsGenerateOptions = {
-      parent: document.getElementsByTagName('body')[0],
-      strokeWidth: 1,
-      strokeColor: 'blue',
-      loaderStrokeColor: 'red',
-      loaderStrokeWidth: 1,
-      animationDuration: 0,
-      animationTiming: 'ease-in-out',
-      labelPosition: 'bottom',
-    };
 
     // the following properties cannot be overriden
     opts = Object.assign(Object.assign(defaultOpts, opts), {
@@ -33,7 +23,7 @@ class Buttons implements IButtons {
       fillColor: 'none',
     });
 
-    const showLoader = (typeof opts.animationDuration !== 'undefined');
+    const showLoader = (opts.animationDuration > 0);
 
     let maxStrokeWidth = opts.strokeWidth;
     if (showLoader) {
@@ -55,13 +45,11 @@ class Buttons implements IButtons {
     };
     const circleLength = (radius: number) => 2 * Math.PI * radius;
     const done = () => {
-      if (typeof callback === 'function') {
-        callback();
-      }
+      callback();
     };
 
-    const left = pos.x - opts.radius - (maxStrokeWidth / 2);
-    const top = pos.y - opts.radius - (maxStrokeWidth / 2);
+    const left = opts.x - opts.radius - (maxStrokeWidth / 2);
+    const top = opts.y - opts.radius - (maxStrokeWidth / 2);
 
     const container = createHtmlElement('div', {
       class: btnCssClass,
