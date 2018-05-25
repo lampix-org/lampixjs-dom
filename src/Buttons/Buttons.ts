@@ -50,9 +50,6 @@ class Buttons implements IButtons {
       return el;
     };
     const circleLength = (radius: number) => 2 * Math.PI * radius;
-    const done = () => {
-      callback();
-    };
     const animateLoader = (loader: SVGElement) => {
       loader.setAttribute('stroke-dashoffset', '0');
     };
@@ -122,7 +119,7 @@ class Buttons implements IButtons {
         'transitionend',
         () => {
           if (loader.getAttribute('stroke-dashoffset') === '0') {
-            done();
+            callback();
           }
         },
         true
@@ -144,6 +141,8 @@ class Buttons implements IButtons {
       activate: () => {
         if (showLoader) {
           animateLoader(loader);
+        } else {
+          callback();
         }
       },
       deactivate: () => {
