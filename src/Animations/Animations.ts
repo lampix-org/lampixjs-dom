@@ -6,12 +6,8 @@ import {
 } from '../types';
 
 import {
-  loadStyles,
   createHtmlElement
 } from '../utils';
-
-// ensure css is loaded
-loadStyles();
 
 class Animations implements IAnimations {
 

@@ -1,4 +1,6 @@
+import kebabCase from 'lodash.kebabcase';
 import {
+  Opts,
   createHtmlElementOptions
 } from '../types';
 
@@ -10,6 +12,14 @@ export const loadStyles = () => {
   style.innerHTML = styles;
 
   document.head.appendChild(style);
+};
+
+// converts a css style object to string
+export const styleToString = (style: Opts<string|number>): string => {
+  // convert to string
+  return Object.keys(style)
+    .map(key => `${kebabCase(key)}:${style[key]};`)
+    .join('');
 };
 
 export const createHtmlElement = (tagName: string, opts?: createHtmlElementOptions): HTMLElement => {
