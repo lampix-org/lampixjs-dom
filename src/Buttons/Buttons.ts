@@ -1,6 +1,8 @@
+import invariant from 'invariant';
 import {
   Opts,
   buttonsGenerateOptions,
+  buttonsGenerateResult,
   IButtons,
 } from '../types';
 
@@ -12,16 +14,20 @@ import {
 import defaultOpts from './defaults';
 
 class Buttons implements IButtons {
-  generate(opts: buttonsGenerateOptions, callback: Function) {
+  generate = (x: number, y: number, callback: Function, opts?: buttonsGenerateOptions): buttonsGenerateResult => {
     const btnCssClass = 'lx-button';
     const allowedLabelPosition = ['bottom', 'left', 'top', 'right'];
     const defaultLabelPosition = 'bottom';
 
     // the following properties cannot be overriden
-    opts = Object.assign(Object.assign(defaultOpts, opts), {
+    opts = Object.assign(defaultOpts, opts, {
       radius: 50,
       fillColor: 'none',
     });
+
+    // validate params
+    invariant(Number.isFinite(x) || Number.isFinite(y), 'Invalid coordinates.');
+    invariant(typeof callback === 'function', 'Callback is not a function.');
 
     const showLoader = (opts.animationDuration > 0);
 
@@ -47,9 +53,22 @@ class Buttons implements IButtons {
     const done = () => {
       callback();
     };
+    const animateLoader = (loader: SVGElement) => {
+      setTimeout(
+        () => {
+          loader.setAttribute('stroke-dashoffset', '0');
+        },
+        0
+      );
+    };
+    const reverseLoader = (loader: SVGElement) => {
+      if (loader) {
+        loader.setAttribute('stroke-dashoffset', `${circleLength(cr)}`);
+      }
+    };
 
-    const left = opts.x - opts.radius - (maxStrokeWidth / 2);
-    const top = opts.y - opts.radius - (maxStrokeWidth / 2);
+    const left = x - opts.radius - (maxStrokeWidth / 2);
+    const top = y - opts.radius - (maxStrokeWidth / 2);
 
     const container = createHtmlElement('div', {
       class: btnCssClass,
@@ -88,8 +107,9 @@ class Buttons implements IButtons {
       container.appendChild(label);
     }
 
+    let loader: SVGElement = null;
     if (showLoader) {
-      const loader = makeSVG('path', {
+      loader = makeSVG('path', {
         class: `${btnCssClass}__loader`,
         d: `M ${cx}, ${cy} m -${cr}, 0 a ${cr},${cr} 0 1,0 ${2 * cr},0 a ${cr},${cr} 0 1,0 -${2 * cr},0`,
         fill: 'none',
@@ -103,19 +123,37 @@ class Buttons implements IButtons {
         })
       });
       svg.appendChild(loader);
-      loader.addEventListener('transitionend', done, true);
-      setTimeout(
+      loader.addEventListener(
+        'transitionend',
         () => {
-          // loader.style.strokeDashoffset = 0; or
-          container.classList.add(`${btnCssClass}--animated`);
+          if (loader.getAttribute('stroke-dashoffset') === '0') {
+            done();
+          }
         },
-        0
+        true
       );
+      animateLoader(loader);
     } else {
       done();
     }
 
     opts.parent.appendChild(container);
+
+    const bounds = container.getBoundingClientRect();
+    const rect = {
+      posX: bounds.left,
+      posY: bounds.top,
+      width: bounds.width,
+      height: bounds.height,
+    };
+
+    return {
+      rect,
+      reverseLoader: () => {
+        reverseLoader(loader);
+      }
+    };
+
   }
 }
 

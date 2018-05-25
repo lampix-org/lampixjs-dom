@@ -3,8 +3,6 @@ import {
 } from '../types';
 
 const defaultOpts: buttonsGenerateOptions = {
-  x: 0,
-  y: 0,
   parent: document.getElementsByTagName('body')[0],
   strokeWidth: 1,
   strokeColor: 'blue',

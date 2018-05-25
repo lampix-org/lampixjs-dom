@@ -62,10 +62,6 @@ const css = `
    transform: scale(-1,1) rotate(90deg);
    transition: stroke-dashoffset 2s ease-in-out;
  }
- .lx-button--animated .lx-button__loader {
-   stroke-dashoffset: 0;
- }
-
 .lx-button__label {
   display: block;
   width: max-content;

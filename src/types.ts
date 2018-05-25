@@ -2,6 +2,13 @@ export type Opts<T> = {
   [key: string]: T
 };
 
+export type ClassifierRect = {
+  posX: number,
+  posY: number,
+  width: number,
+  height: number
+};
+
 export type createHtmlElementAttrs = {
   class?: string,
 };
@@ -21,8 +28,6 @@ export interface IAnimations {
 }
 
 export type buttonsGenerateOptions = {
-  x: number,
-  y: number,
   parent?: HTMLElement,
   strokeWidth?: number,
   strokeColor?: string,
@@ -36,11 +41,18 @@ export type buttonsGenerateOptions = {
   labelPosition?: string,
 };
 
+export type buttonsGenerateResult = {
+  rect: ClassifierRect,
+  reverseLoader: Function
+};
+
 export interface IButtons {
   generate: (
-    opts: buttonsGenerateOptions,
-    callback: Function
-  ) => void;
+    x: number,
+    y: number,
+    callback: Function,
+    opts?: buttonsGenerateOptions
+  ) => buttonsGenerateResult;
 }
 
 export type createHtmlElementOptions = {
