@@ -54,12 +54,7 @@ class Buttons implements IButtons {
       callback();
     };
     const animateLoader = (loader: SVGElement) => {
-      setTimeout(
-        () => {
-          loader.setAttribute('stroke-dashoffset', '0');
-        },
-        0
-      );
+      loader.setAttribute('stroke-dashoffset', '0');
     };
     const reverseLoader = (loader: SVGElement) => {
       if (loader) {
@@ -118,7 +113,7 @@ class Buttons implements IButtons {
         'stroke-dasharray': `${circleLength(cr)} ${circleLength(cr)}`,
         'stroke-dashoffset': circleLength(cr),
         style: styleToString({
-          transitionDuration: `${opts.animationDuration / 1000}s`,
+          transitionDuration: `${opts.animationDuration}ms`,
           transitionTimingFunction: opts.animationTiming
         })
       });
@@ -132,7 +127,6 @@ class Buttons implements IButtons {
         },
         true
       );
-      animateLoader(loader);
     } else {
       done();
     }
@@ -149,9 +143,12 @@ class Buttons implements IButtons {
 
     return {
       rect,
+      animateLoader: () => {
+        animateLoader(loader);
+      },
       reverseLoader: () => {
         reverseLoader(loader);
-      }
+      },
     };
 
   }
