@@ -127,8 +127,6 @@ class Buttons implements IButtons {
         },
         true
       );
-    } else {
-      done();
     }
 
     opts.parent.appendChild(container);
@@ -143,10 +141,12 @@ class Buttons implements IButtons {
 
     return {
       rect,
-      animateLoader: () => {
-        animateLoader(loader);
+      activate: () => {
+        if (showLoader) {
+          animateLoader(loader);
+        }
       },
-      reverseLoader: () => {
+      deactivate: () => {
         reverseLoader(loader);
       },
     };

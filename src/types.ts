@@ -43,8 +43,8 @@ export type buttonsGenerateOptions = {
 
 export type buttonsGenerateResult = {
   rect: ClassifierRect,
-  animateLoader: Function,
-  reverseLoader: Function
+  activate: Function,
+  deactivate: Function
 };
 
 export interface IButtons {
