@@ -18,7 +18,7 @@ export default [
   {
     input: defaults.input,
     output: {
-      file: 'lib/umd/index.js',
+      file: 'lib/umd/lampix-dom.js',
       format: 'umd',
       name: defaults.name
     },
