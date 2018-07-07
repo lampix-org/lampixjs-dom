@@ -134,6 +134,7 @@ class Buttons implements IButtons {
       posY: bounds.top,
       width: bounds.width,
       height: bounds.height,
+      classifier: 'cls_loc_fin_all_small'
     };
 
     return {
