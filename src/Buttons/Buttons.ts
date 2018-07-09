@@ -88,6 +88,12 @@ class Buttons implements IButtons {
     });
     svg.appendChild(circle);
 
+    if (typeof opts.label === 'string' && opts.label.length) {
+      const label = createHtmlElement('div', { style: 'text-align:center;' });
+      const labelHtml = createHtmlElement('span', { html: opts.label });
+      label.appendChild(labelHtml);
+      opts.label = label;
+    }
     if (typeof opts.label === 'object') {
       if (!allowedLabelPosition.includes(opts.labelPosition)) {
         opts.labelPosition = defaultLabelPosition;

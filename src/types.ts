@@ -37,7 +37,7 @@ export type buttonsGenerateOptions = {
   loaderStrokeWidth?: number,
   animationDuration?: number,
   animationTiming?: string,
-  label?: HTMLElement,
+  label?: HTMLElement | string,
   labelPosition?: string,
 };
 
