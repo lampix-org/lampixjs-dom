@@ -21,7 +21,7 @@ class Buttons implements IButtons {
 
     // the following properties cannot be overriden
     opts = Object.assign(defaultOpts, opts, {
-      radius: 25 // half the size of the button
+      radius: 13 // half the size of the button
     });
 
     // validate params
