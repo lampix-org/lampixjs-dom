@@ -136,10 +136,10 @@ class Buttons implements IButtons {
 
     const bounds = container.getBoundingClientRect();
     const rect = {
-      posX: bounds.left,
-      posY: bounds.top,
-      width: bounds.width,
-      height: bounds.height,
+      posX: Math.round(bounds.left),
+      posY: Math.round(bounds.top),
+      width: Math.round(bounds.width),
+      height: Math.round(bounds.height),
       classifier: 'cls_loc_fin_all_small'
     };
 
