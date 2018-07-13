@@ -20,7 +20,7 @@ class Buttons implements IButtons {
     const defaultLabelPosition = 'bottom';
 
     // the following properties cannot be overriden
-    opts = Object.assign(defaultOpts, opts, {
+    opts = Object.assign({}, defaultOpts, opts, {
       radius: 13 // half the size of the button
     });
 
