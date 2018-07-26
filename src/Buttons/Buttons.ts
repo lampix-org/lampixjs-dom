@@ -30,14 +30,25 @@ class Buttons implements IButtons {
 
     const showLoader = (opts.animationDuration > 0);
 
-    let maxStrokeWidth = opts.strokeWidth;
+    let halfTotalStrokeWidth = (opts.strokeWidth / 2);
     if (showLoader) {
-      maxStrokeWidth = Math.max(maxStrokeWidth, opts.loaderStrokeWidth);
+      if (opts.outerLoader) {
+        halfTotalStrokeWidth += opts.loaderStrokeWidth;
+      } else {
+        halfTotalStrokeWidth = Math.max(opts.strokeWidth, opts.loaderStrokeWidth) / 2;
+      }
     }
-    const svgWidth = (2 * opts.radius) + maxStrokeWidth;
-    const cx = opts.radius + (maxStrokeWidth / 2);
-    const cy = opts.radius + (maxStrokeWidth / 2);
+
+    // stroke is on the circle radius, half inside, half outside
+    const svgWidth = (2 * opts.radius) + (halfTotalStrokeWidth * 2);
+    const cx = opts.radius + halfTotalStrokeWidth;
+    const cy = opts.radius + halfTotalStrokeWidth;
     const cr = opts.radius;
+
+    let loaderCr = opts.radius;
+    if (showLoader && opts.outerLoader) {
+      loaderCr += (opts.strokeWidth / 2) + (opts.loaderStrokeWidth / 2);
+    }
 
     const makeSVG = (tag: string, attrs: Opts<string|number>) => {
       const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -54,19 +65,19 @@ class Buttons implements IButtons {
     };
     const reverseLoader = (loader: SVGElement) => {
       if (loader) {
-        loader.setAttribute('stroke-dashoffset', `${circleLength(cr)}`);
+        loader.setAttribute('stroke-dashoffset', `${circleLength(loaderCr)}`);
       }
     };
 
-    const left = x - opts.radius - (maxStrokeWidth / 2);
-    const top = y - opts.radius - (maxStrokeWidth / 2);
+    const btnPositionLeft = x - (svgWidth / 2);
+    const btnPositionTop = y - (svgWidth / 2);
 
     const container = createHtmlElement('div', {
       class: btnCssClass,
       style: styleToString({
         position: 'fixed',
-        left: `${left}px`,
-        top: `${top}px`,
+        left: `${btnPositionLeft}px`,
+        top: `${btnPositionTop}px`,
       })
     });
 
@@ -108,12 +119,14 @@ class Buttons implements IButtons {
     if (showLoader) {
       loader = makeSVG('path', {
         class: `${btnCssClass}__loader`,
-        d: `M ${cx}, ${cy} m -${cr}, 0 a ${cr},${cr} 0 1,0 ${2 * cr},0 a ${cr},${cr} 0 1,0 -${2 * cr},0`,
+        d: ((cx, cy, cr) => {
+          return `M ${cx}, ${cy} m -${cr}, 0 a ${cr},${cr} 0 1,0 ${2 * cr},0 a ${cr},${cr} 0 1,0 -${2 * cr},0`;
+        })(cx, cy, loaderCr),
         fill: 'none',
         stroke: opts.loaderStrokeColor,
         'stroke-width': opts.loaderStrokeWidth,
-        'stroke-dasharray': `${circleLength(cr)} ${circleLength(cr)}`,
-        'stroke-dashoffset': circleLength(cr),
+        'stroke-dasharray': `${circleLength(loaderCr)} ${circleLength(loaderCr)}`,
+        'stroke-dashoffset': circleLength(loaderCr),
         style: styleToString({
           transitionDuration: `${opts.animationDuration}ms`,
           transitionTimingFunction: opts.animationTiming
