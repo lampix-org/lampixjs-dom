@@ -54,6 +54,9 @@ const css = `
 
  .lx-button { }
  .lx-button__svg { }
+ .lx-button__svg--anim-transform {
+   transition: transform 1s ease-out;
+ }
 
  .lx-button__path {}
  .lx-button__loader {

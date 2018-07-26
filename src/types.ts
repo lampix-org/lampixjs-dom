@@ -39,6 +39,7 @@ export type buttonsGenerateOptions = {
   animationTiming?: string,
   label?: HTMLElement | string,
   labelPosition?: string,
+  scaleFactor?: number,
 };
 
 export type buttonsGenerateResult = {
