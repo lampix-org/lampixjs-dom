@@ -31,6 +31,7 @@ export declare type buttonsGenerateOptions = {
     animationTiming?: string;
     label?: HTMLElement | string;
     labelPosition?: string;
+    scaleFactor?: number;
 };
 export declare type buttonsGenerateResult = {
     rect: ClassifierRect;
