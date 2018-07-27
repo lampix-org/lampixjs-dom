@@ -11,7 +11,8 @@ const defaultOpts: buttonsGenerateOptions = {
   animationDuration: 0,
   animationTiming: 'ease-in-out',
   labelPosition: 'top',
-  scaleFactor: 1.1,
+  outerLoader: false,
+  scaleFactor: 1.1
 };
 
 export default defaultOpts;
