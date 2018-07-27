@@ -40,6 +40,7 @@ export type buttonsGenerateOptions = {
   label?: HTMLElement | string,
   labelPosition?: string,
   outerLoader?: boolean,
+  scaleFactor?: number
 };
 
 export type buttonsGenerateResult = {

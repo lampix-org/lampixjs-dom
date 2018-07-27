@@ -84,8 +84,9 @@ class Buttons implements IButtons {
     const svg = makeSVG('svg', {
       width: svgWidth,
       height: svgWidth,
-      class: `${btnCssClass}__svg`,
+      class: `${btnCssClass}__svg ${btnCssClass}__svg--anim-transform`,
       viewBox: `0 0 ${svgWidth} ${svgWidth}`,
+      // style: `transform: scale3d(${opts.scaleFactor}, ${opts.scaleFactor}, ${opts.scaleFactor});`
     });
     container.appendChild(svg);
 
@@ -158,6 +159,9 @@ class Buttons implements IButtons {
     return {
       rect,
       activate: () => {
+        // apply scale factor
+        svg.style.transform = `scale3d(${opts.scaleFactor}, ${opts.scaleFactor}, ${opts.scaleFactor})`;
+
         if (showLoader) {
           animateLoader(loader);
         } else {
@@ -165,6 +169,9 @@ class Buttons implements IButtons {
         }
       },
       deactivate: () => {
+        // reset scale factor
+        svg.style.transform = '';
+
         reverseLoader(loader);
       },
     };
