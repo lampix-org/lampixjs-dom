@@ -1,10 +1,13 @@
+import lampix from '@lampix/core';
 import invariant from 'invariant';
 import {
   Opts,
   buttonsGenerateOptions,
-  buttonsGenerateResult,
-  IButtons,
+  IButtons
 } from '../types';
+import {
+  RegisteredWatcher
+} from '@lampix/core/lib/types';
 
 import {
   createHtmlElement,
@@ -14,7 +17,12 @@ import {
 import defaultOpts from './defaults';
 
 class Buttons implements IButtons {
-  generate = (x: number, y: number, callback: Function, opts?: buttonsGenerateOptions): buttonsGenerateResult => {
+  generate = (
+    x: number,
+    y: number,
+    callback: Function,
+    opts?: buttonsGenerateOptions
+  ): Promise<RegisteredWatcher> => {
     const btnCssClass = 'lx-button';
     const allowedLabelPosition = ['bottom', 'left', 'top', 'right'];
     const defaultLabelPosition = 'bottom';
@@ -147,35 +155,34 @@ class Buttons implements IButtons {
 
     opts.parent.appendChild(container);
 
-    const bounds = container.getBoundingClientRect();
-    const rect = {
-      posX: Math.round(bounds.left),
-      posY: Math.round(bounds.top),
-      width: Math.round(bounds.width),
-      height: Math.round(bounds.height),
-      classifier: 'cls_loc_fin_all_small'
+    const activate = () => {
+      // apply scale factor
+      svg.style.transform = `scale3d(${opts.scaleFactor}, ${opts.scaleFactor}, ${opts.scaleFactor})`;
+
+      if (showLoader) {
+        animateLoader(loader);
+      } else {
+        callback();
+      }
     };
 
-    return {
-      rect,
-      activate: () => {
-        // apply scale factor
-        svg.style.transform = `scale3d(${opts.scaleFactor}, ${opts.scaleFactor}, ${opts.scaleFactor})`;
+    const deactivate = () => {
+      // reset scale factor
+      svg.style.transform = '';
 
-        if (showLoader) {
-          animateLoader(loader);
-        } else {
-          callback();
-        }
-      },
-      deactivate: () => {
-        // reset scale factor
-        svg.style.transform = '';
-
-        reverseLoader(loader);
-      },
+      reverseLoader(loader);
     };
 
+    const { left, top } = container.getBoundingClientRect();
+    const watcher = lampix.presets.button(left, top, (recognizedClass: string) => {
+      if (Number(recognizedClass) === 1) {
+        activate();
+      } else {
+        deactivate();
+      }
+    });
+
+    return lampix.watchers.add(watcher).then(([rw]) => rw);
   }
 }
 

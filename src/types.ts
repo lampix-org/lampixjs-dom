@@ -1,12 +1,9 @@
+import {
+  RegisteredWatcher
+} from '@lampix/core/lib/types';
+
 export type Opts<T> = {
   [key: string]: T
-};
-
-export type ClassifierRect = {
-  posX: number,
-  posY: number,
-  width: number,
-  height: number
 };
 
 export type createHtmlElementAttrs = {
@@ -43,19 +40,13 @@ export type buttonsGenerateOptions = {
   scaleFactor?: number
 };
 
-export type buttonsGenerateResult = {
-  rect: ClassifierRect,
-  activate: Function,
-  deactivate: Function
-};
-
 export interface IButtons {
   generate: (
     x: number,
     y: number,
     callback: Function,
     opts?: buttonsGenerateOptions
-  ) => buttonsGenerateResult;
+  ) => Promise<RegisteredWatcher>;
 }
 
 export type createHtmlElementOptions = {
