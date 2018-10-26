@@ -6,7 +6,8 @@ import {
   IButtons
 } from '../types';
 import {
-  RegisteredWatcher
+  RegisteredWatcher,
+  ClassifiedObject
 } from '@lampix/core/lib/types';
 
 import {
@@ -93,8 +94,7 @@ class Buttons implements IButtons {
       width: svgWidth,
       height: svgWidth,
       class: `${btnCssClass}__svg ${btnCssClass}__svg--anim-transform`,
-      viewBox: `0 0 ${svgWidth} ${svgWidth}`,
-      // style: `transform: scale3d(${opts.scaleFactor}, ${opts.scaleFactor}, ${opts.scaleFactor});`
+      viewBox: `0 0 ${svgWidth} ${svgWidth}`
     });
     container.appendChild(svg);
 
@@ -174,8 +174,8 @@ class Buttons implements IButtons {
     };
 
     const { left, top } = container.getBoundingClientRect();
-    const watcher = lampix.presets.button(left, top, (recognizedClass: string) => {
-      if (Number(recognizedClass) === 1) {
+    const watcher = lampix.presets.button(left, top, ([recognizedObject]: ClassifiedObject[]) => {
+      if (Number(recognizedObject.classTag) === 1) {
         activate();
       } else {
         deactivate();
