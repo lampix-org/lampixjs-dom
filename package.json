@@ -1,6 +1,6 @@
 {
   "name": "@lampix/dom",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.3",
   "description": "",
   "main": "lib/lampix.js",
   "module": "lib/lampix.js",
