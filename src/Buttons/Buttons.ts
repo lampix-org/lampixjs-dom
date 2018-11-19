@@ -183,7 +183,7 @@ class Buttons implements IButtons {
     });
 
     return lampix.watchers.add(watcher).then(([rw]) => {
-      rw.ui.element = container;
+      rw.ui = { element: container };
       return rw;
     });
   }
