@@ -174,13 +174,20 @@ class Buttons implements IButtons {
     };
 
     const { left, top } = container.getBoundingClientRect();
-    const watcher = lampix.presets.button(left, top, ([recognizedObject]: ClassifiedObject[]) => {
+    const nncCallback = ([recognizedObject]: ClassifiedObject[]) => {
       if (Number(recognizedObject.classTag) === 1) {
         activate();
       } else {
         deactivate();
       }
-    });
+    };
+
+    const watcher = lampix.presets.button(
+      left,
+      top,
+      nncCallback,
+      { width: svgWidth, height: svgWidth }
+    );
 
     return lampix.watchers.add(watcher).then(([rw]) => {
       rw.ui = { element: container };
