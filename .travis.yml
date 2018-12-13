@@ -2,8 +2,8 @@ language: node_js
 node_js: '10'
 
 install:
-  - npm i --no-save @lampix/core
   - npm ci
+  - npm i --no-save @lampix/core
 
 deploy:
   provider: npm
