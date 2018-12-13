@@ -1,5 +1,10 @@
 language: node_js
 node_js: '10'
+
+install:
+  - npm i --no-save @lampix/core
+  - npm ci
+
 deploy:
   provider: npm
   email: dbalaban@lampix.co

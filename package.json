@@ -45,7 +45,6 @@
     ]
   },
   "dependencies": {
-    "@lampix/core": "1.0.0-beta.8",
     "invariant": "2.2.4",
     "lodash": "4.17.10"
   },
