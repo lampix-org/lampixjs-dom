@@ -24,6 +24,8 @@ export interface IAnimations {
   ) => HTMLHtmlElement;
 }
 
+export type AllowedLabelPositions = 'bottom' | 'top' | 'left' | 'right';
+
 export type buttonsGenerateOptions = {
   parent?: HTMLElement,
   strokeWidth?: number,
@@ -35,7 +37,7 @@ export type buttonsGenerateOptions = {
   animationDuration?: number,
   animationTiming?: string,
   label?: HTMLElement | string,
-  labelPosition?: string,
+  labelPosition?: AllowedLabelPositions,
   outerLoader?: boolean,
   scaleFactor?: number
 };
@@ -51,5 +53,7 @@ export interface IButtons {
 
 export type createHtmlElementOptions = {
   html?: string,
-  [key: string]: string
+  other?: {
+    [key: string]: string
+  }
 };

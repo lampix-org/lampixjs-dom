@@ -31,10 +31,10 @@ export const createHtmlElement = (tagName: string, opts?: createHtmlElementOptio
   opts = Object.assign(defaultOpts, typeof opts === 'object' ? opts : {});
 
   // set attributes
-  Object.keys(opts).filter(prop => prop !== 'html').forEach(prop => {
-    element.setAttribute(prop, opts[prop]);
+  Object.keys(opts.other || {}).forEach(prop => {
+    element.setAttribute(prop, opts.other[prop]);
   });
 
-  element.innerHTML = opts.html;
+  element.textContent = opts.html;
   return element;
 };

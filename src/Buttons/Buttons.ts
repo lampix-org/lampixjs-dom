@@ -15,6 +15,7 @@ import {
   styleToString
 } from '../utils';
 
+import createLabel from './createLabel';
 import defaultOpts from './defaults';
 
 class Buttons implements IButtons {
@@ -25,8 +26,6 @@ class Buttons implements IButtons {
     opts?: buttonsGenerateOptions
   ): Promise<RegisteredWatcher> => {
     const btnCssClass = 'lx-button';
-    const allowedLabelPosition = ['bottom', 'left', 'top', 'right'];
-    const defaultLabelPosition = 'bottom';
 
     // the following properties cannot be overriden
     opts = Object.assign({}, defaultOpts, opts, {
@@ -82,12 +81,14 @@ class Buttons implements IButtons {
     const btnPositionTop = y - (svgWidth / 2);
 
     const container = createHtmlElement('div', {
-      class: btnCssClass,
-      style: styleToString({
-        position: 'fixed',
-        left: `${btnPositionLeft}px`,
-        top: `${btnPositionTop}px`,
-      })
+      other: {
+        class: btnCssClass,
+        style: styleToString({
+          position: 'fixed',
+          left: `${btnPositionLeft}px`,
+          top: `${btnPositionTop}px`,
+        })
+      }
     });
 
     const svg = makeSVG('svg', {
@@ -107,22 +108,8 @@ class Buttons implements IButtons {
     });
     svg.appendChild(circle);
 
-    if (typeof opts.label === 'string' && opts.label.length) {
-      const label = createHtmlElement('div', { style: 'text-align:center;' });
-      const labelHtml = createHtmlElement('span', { html: opts.label });
-      label.appendChild(labelHtml);
-      opts.label = label;
-    }
-    if (typeof opts.label === 'object') {
-      if (!allowedLabelPosition.includes(opts.labelPosition)) {
-        opts.labelPosition = defaultLabelPosition;
-      }
-      const label = createHtmlElement('div', {
-        class: `${btnCssClass}__label ${btnCssClass}__label--${opts.labelPosition}`,
-      });
-      label.appendChild(opts.label);
-      container.appendChild(label);
-    }
+    const label = createLabel(opts.label, opts.labelPosition, btnCssClass);
+    container.appendChild(label);
 
     let loader: SVGElement = null;
     if (showLoader) {
@@ -190,7 +177,12 @@ class Buttons implements IButtons {
     );
 
     return lampix.watchers.add(watcher).then(([rw]) => {
-      rw.ui = { element: container };
+      rw.ui = {
+        element: container,
+        changeLabel: (newLabelText: string) => {
+          label.textContent = newLabelText;
+        }
+      };
       return rw;
     });
   }

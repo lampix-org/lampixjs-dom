@@ -63,7 +63,7 @@ class Animations implements IAnimations {
 
     if (!element.classList.contains(cssAnimClass)) {
       // add helper elements
-      const animContainer = createHtmlElement('div', { class: cssAnimClassContainer });
+      const animContainer = createHtmlElement('div', { other: { class: cssAnimClassContainer } });
 
       const corner1CssOpts = Object.assign({}, cssOpts);
       const corner2CssOpts = Object.assign({}, cssOpts);
@@ -87,8 +87,8 @@ class Animations implements IAnimations {
         .map(key => `${kebabCase(key)}: ${corner2CssOpts[key]};`)
         .join(' ');
 
-      const corner1 = createHtmlElement('i', { style: corner1Style });
-      const corner2 = createHtmlElement('i', { style: corner2Style });
+      const corner1 = createHtmlElement('i', { other: { style: corner1Style } });
+      const corner2 = createHtmlElement('i', { other: { style: corner2Style } });
       animContainer.appendChild(corner1);
       animContainer.appendChild(corner2);
 
