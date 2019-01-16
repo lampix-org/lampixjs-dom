@@ -183,6 +183,14 @@ class Buttons implements IButtons {
           label.textContent = newLabelText;
         }
       };
+
+      const pause = rw.pause;
+
+      rw.pause = (time: number = 0) => {
+        deactivate();
+        return pause(time);
+      };
+
       return rw;
     });
   }
